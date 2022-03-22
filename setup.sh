@@ -42,8 +42,6 @@ applySecretProviderClass() {
         data:
         - objectName: TEST-AKV-SECRETS
           key: TEST_AKV_SECRETS
-        - objectName: TEST-AKV-SECRETS-TWO
-          key: TEST_AKV_SECRETS_TWO
       parameters:
         usePodIdentity: "true"                                        
         keyvaultName: ${1}akvprod
@@ -52,10 +50,6 @@ applySecretProviderClass() {
           array:
             - |
                 objectName: TEST-AKV-SECRETS             
-                objectType: secret                 
-                objectVersion: ""
-            - |
-                objectName: TEST-AKV-SECRETS-TWO             
                 objectType: secret                 
                 objectVersion: ""
         tenantId: ${2}
@@ -434,7 +428,10 @@ resyncAKV() {
   
     # Delete the service and secrets before reapplying
     print -P \\n'%F{green}Deleting the existing SecretProvierClass and Secrets...%f'
+    set +e
+    kubectl delete secretproviderclass aks-akv-secret-provider -n ${namespace}
     kubectl delete secrets ${resourceGroupName:l}-prod-secrets -n ${namespace}    
+    set -e
 
     # Call the applySecretProviderClass function
     applySecretProviderClass ${resourceGroupName:l} ${tenantId} ${namespace}

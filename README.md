@@ -286,11 +286,11 @@ This is the function you need to manually edit to deploy anything else with this
 This should resync new keys that are added to AKV, and sync them to Pods that are consuming the `secrets-store`. It does the following:
 - Prompts and confirms with the user various parameters for this option
 - Switches to the correct conext using `{resourceGroupName:l}aks`
-- Deletes the current `kubectl secrets ...`
+- Deletes the current `SecretProviderClass` and `kubectl secrets ...`
 - Reapplies the `SecretProviderClass` and creates a new `kubectl secrets ...`
 
 ### Next Step
-None.
+Any Pod that consume the `secrets-store` or `kubectl secrets ...` needs to be reployed for the new secrets to be available.
 
 ## Option 5: Reset Azure Kubernetes Service Cluster
 ### Outline
